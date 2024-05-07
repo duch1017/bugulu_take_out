@@ -7,7 +7,7 @@
           <GenerateConfig>
             <option name="annotationType" value="MYBATIS_PLUS3" />
             <option name="basePackage" value="entity" />
-            <option name="basePath" value="src.main.java.com.itheima.reggie" />
+            <option name="basePath" value="com.itheima.reggie" />
             <option name="classNameStrategy" value="camel" />
             <option name="encoding" value="UTF-8" />
             <option name="extraClassSuffix" value="" />
@@ -69,8 +69,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Category" />
-                  <option name="tableName" value="category" />
+                  <option name="className" value="Dish" />
+                  <option name="tableName" value="dish" />
                 </TableUIInfo>
               </list>
             </option>
