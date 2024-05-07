@@ -1,6 +1,7 @@
 package com.itheima.reggie.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.Result;
 import com.itheima.reggie.entity.Employee;
@@ -139,5 +140,21 @@ public class EmployeeController {
 
         employeeService.updateById(employee);
         return Result.success("员工信息修改成功");
+    }
+
+    /**
+     * 根据id查询员工
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@PathVariable Long id) {
+        log.info("根据id查询员工");
+        Employee emp = employeeService.getById(id);
+        if (emp != null) {
+            return Result.success(emp);
+        }
+        return Result.error("没有查询到对应员工信息");
     }
 }
