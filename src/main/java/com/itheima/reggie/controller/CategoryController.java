@@ -11,6 +11,7 @@ import com.itheima.reggie.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,20 @@ public class CategoryController {
         categoryService.page(pageInfo, queryWrapper);
 
         return Result.success(pageInfo);
+    }
+
+    /**
+     * 根据id删除分类
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    public Result<String> delete(Long id) {
+        log.info("根据id删除分类：{}", id);
+        categoryService.removeById(id);
+
+        return Result.success("分类信息删除成功");
     }
 
 }
