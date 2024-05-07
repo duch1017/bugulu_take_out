@@ -32,4 +32,10 @@ public class GlobalExceptionHandle {
 
         return Result.error("未知错误");
     }
+
+    @ExceptionHandler(CustomException.class)
+    public Result<String> exceptionHandle(CustomException e) {
+        log.error(e.getMessage());
+        return Result.error(e.getMessage());
+    }
 }

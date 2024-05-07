@@ -74,8 +74,9 @@ public class CategoryController {
     @DeleteMapping
     public Result<String> delete(Long id) {
         log.info("根据id删除分类：{}", id);
-        categoryService.removeById(id);
 
+//        categoryService.removeById(id);
+        categoryService.remove(id);
         return Result.success("分类信息删除成功");
     }
 
