@@ -7,7 +7,7 @@
           <GenerateConfig>
             <option name="annotationType" value="MYBATIS_PLUS3" />
             <option name="basePackage" value="entity" />
-            <option name="basePath" value="src/main/java.com.itheima.reggie" />
+            <option name="basePath" value="src.main.java.com.itheima.reggie" />
             <option name="classNameStrategy" value="camel" />
             <option name="encoding" value="UTF-8" />
             <option name="extraClassSuffix" value="" />
@@ -64,13 +64,13 @@
             <option name="needToStringHashcodeEquals" value="true" />
             <option name="needsComment" value="true" />
             <option name="needsModel" value="true" />
-            <option name="relativePackage" value="entity" />
+            <option name="relativePackage" value="" />
             <option name="superClass" value="" />
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Employee" />
-                  <option name="tableName" value="employee" />
+                  <option name="className" value="Category" />
+                  <option name="tableName" value="category" />
                 </TableUIInfo>
               </list>
             </option>
