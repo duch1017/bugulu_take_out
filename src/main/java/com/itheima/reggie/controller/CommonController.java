@@ -24,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 public class CommonController {
-    @Value("reggie.path")
+    @Value("${reggie.path}")
     private String basePath;
 
     /**
@@ -50,8 +50,9 @@ public class CommonController {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        file.transferTo(new File(basePath + fileName));
 
+        file.transferTo(new File(basePath + fileName));
+        log.info(basePath + fileName);
         return Result.success(fileName);
     }
 
