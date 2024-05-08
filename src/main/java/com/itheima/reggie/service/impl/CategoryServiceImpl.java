@@ -17,9 +17,11 @@ import javax.annotation.Resource;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
-    @Autowired
+//    @Autowired
+    @Resource(name = "dishServiceImpl")
     private DishService dishService;
-    @Autowired
+//    @Autowired
+    @Resource(name = "setmealServiceImpl")
     private SetmealService setmealService;
 
     /**
