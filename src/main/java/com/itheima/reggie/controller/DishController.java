@@ -39,7 +39,7 @@ public class DishController {
     @PostMapping
     public Result<String> save(@RequestBody DishDto dishDto) {
         log.info("{}", dishDto);
-        dishService.saveWithFlaavor(dishDto);
+        dishService.saveWithFlavor(dishDto);
         return Result.success("新增菜品成功");
     }
 
@@ -79,5 +79,16 @@ public class DishController {
         dishDtoPage.setRecords(dishDtoList);
 
         return Result.success(dishDtoPage);
+    }
+
+    /**
+     * 根据id查询对应菜品信息和口味信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Result<DishDto> get(@PathVariable Long id){
+        DishDto dishDto = dishService.getByIdWithFlavor(id);
+        return Result.success(dishDto);
     }
 }

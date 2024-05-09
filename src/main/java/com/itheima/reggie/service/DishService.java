@@ -11,5 +11,6 @@ import org.springframework.stereotype.Service;
  * @createDate 2024-05-08 00:02:00
  */
 public interface DishService extends IService<Dish> {
-    void saveWithFlaavor(DishDto dishDto);
+    void saveWithFlavor(DishDto dishDto);
+    DishDto getByIdWithFlavor(Long id);
 }
