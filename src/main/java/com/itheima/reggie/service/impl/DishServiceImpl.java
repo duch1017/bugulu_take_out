@@ -67,6 +67,20 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
 
         return dishDto;
     }
+
+    @Override
+    public void updateWithFlavor(DishDto dishDto) {
+        this.updateById(dishDto);
+        LambdaQueryWrapper<DishFlavor> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DishFlavor::getDishId, dishDto.getId());
+        dishFlavorService.remove(queryWrapper);
+        List<DishFlavor> flavors = dishDto.getFlavors();
+        flavors = flavors.stream().map((item) -> {
+            item.setDishId(dishDto.getId());
+            return item;
+        }).collect(Collectors.toList());
+        dishFlavorService.saveBatch(flavors);
+    }
 }
 
 
