@@ -2,11 +2,13 @@ package com.itheima.reggie.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.Result;
 import com.itheima.reggie.dto.SetmealDto;
 import com.itheima.reggie.entity.Category;
 import com.itheima.reggie.entity.Setmeal;
+import com.itheima.reggie.entity.SetmealDish;
 import com.itheima.reggie.service.CategoryService;
 import com.itheima.reggie.service.SetmealDishService;
 import com.itheima.reggie.service.SetmealService;
@@ -15,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +44,7 @@ public class SetmealController {
      */
     @PostMapping
     public Result<String> save(@RequestBody SetmealDto setmealDto) {
-        log.info("套餐信息：{}", setmealDto);
+        log.info("套餐信息: {}", setmealDto);
         setmealService.saveWithDish(setmealDto);
 
         return Result.success("新增套餐成功");
@@ -93,10 +96,45 @@ public class SetmealController {
         return Result.success("套餐数据删除成功");
     }
 
+    /**
+     * 修改套餐状态
+     *
+     * @param status
+     * @param ids
+     * @return
+     */
     @PostMapping("/status/{status}")
     public Result<String> updateStatus(@PathVariable Integer status, @RequestParam List<Long> ids) {
         log.info("status:{},ids:{}", status, ids);
         setmealService.updateStatus(status, ids);
         return Result.success("修改套餐状态成功");
     }
+
+    /**
+     * 修改套餐回显
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Result<SetmealDto> page(@PathVariable Long id) {
+        log.info("id:{}", id);
+        Setmeal setmeal = setmealService.getById(id);
+        SetmealDto setmealDto = new SetmealDto();
+        BeanUtils.copyProperties(setmeal, setmealDto);
+        LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId, id);
+        List<SetmealDish> dishList = setmealDishService.list(queryWrapper);
+        setmealDto.setSetmealDishes(dishList);
+        return Result.success(setmealDto);
+    }
+
+    @PutMapping
+    public Result<String> updateSetmeal(@RequestBody SetmealDto setmealDto) {
+        log.info("setmealDto:{}", setmealDto);
+        log.info("更新套餐：{}", setmealDto.getName());
+        setmealService.updateWithDish(setmealDto);
+        return Result.success("更新套餐成功");
+    }
+
 }

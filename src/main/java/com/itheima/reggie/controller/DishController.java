@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,4 +123,34 @@ public class DishController {
         List<Dish> list = dishService.list(queryWrapper);
         return Result.success(list);
     }
+
+    /**
+     * 修改菜品状态
+     *
+     * @param status
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result<String> updateStatus(@PathVariable Integer status, @RequestParam List<Long> ids) {
+        log.info("status:{},ids:{}", status, ids);
+        dishService.updateStatus(status, ids);
+        return Result.success("修改套餐状态成功");
+    }
+
+    /**
+     * 删除菜品
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public Result<String> removeDish(Long[] ids) {
+        log.info("ids:{}", Arrays.stream(ids).toArray());
+//        String[] split = ids.split(",");
+        List<Long> idList= Arrays.asList(ids);
+        dishService.removeByIdList(idList);
+        return Result.success("删除成功");
+    }
+
 }

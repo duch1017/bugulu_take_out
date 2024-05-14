@@ -1,6 +1,8 @@
 package com.itheima.reggie.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.reggie.common.CustomException;
 import com.itheima.reggie.dto.SetmealDto;
@@ -9,6 +11,7 @@ import com.itheima.reggie.entity.SetmealDish;
 import com.itheima.reggie.service.SetmealDishService;
 import com.itheima.reggie.service.SetmealService;
 import com.itheima.reggie.mapper.SetmealMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
  * @description 针对表【setmeal(套餐)】的数据库操作Service实现
  * @createDate 2024-05-08 00:03:52
  */
+@Slf4j
 @Service
 public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal>
         implements SetmealService {
@@ -74,7 +78,27 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal>
         setmeal.setStatus(status);
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(Setmeal::getId, ids);
-        this.update(setmeal,queryWrapper);
+        this.update(setmeal, queryWrapper);
+    }
+
+    @Override
+    @Transactional
+    public void updateWithDish(SetmealDto setmealDto) {
+        this.updateById(setmealDto);
+        Long setmealId = setmealDto.getId();
+        LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId, setmealId);
+
+
+        setmealDishService.remove(queryWrapper);
+
+        List<SetmealDish> dishList = setmealDto.getSetmealDishes();
+        dishList = dishList.stream()
+                .peek((item) -> item.setSetmealId(setmealDto.getId()))
+                .collect(Collectors.toList());
+
+        setmealDishService.saveOrUpdateBatch(dishList);
+
     }
 }
 

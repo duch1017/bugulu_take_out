@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.entity.Dish;
 import com.itheima.reggie.entity.DishFlavor;
+import com.itheima.reggie.entity.Setmeal;
 import com.itheima.reggie.service.DishFlavorService;
 import com.itheima.reggie.service.DishService;
 import com.itheima.reggie.mapper.DishMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  * @createDate 2024-05-08 00:02:00
  */
 @Service
+@Slf4j
 public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
         implements DishService {
     @Resource(name = "dishFlavorServiceImpl")
@@ -80,6 +83,24 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
             return item;
         }).collect(Collectors.toList());
         dishFlavorService.saveBatch(flavors);
+    }
+
+    @Override
+    public void updateStatus(Integer status, List<Long> ids) {
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Dish::getId, ids);
+        this.update(dish, queryWrapper);
+    }
+
+    @Override
+    public void removeByIdList(List<Long> ids) {
+//        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(Dish::getId,ids);
+//        List<Dish> list = this.list(queryWrapper);
+//        log.info("dishList: {}",list);
+        this.removeByIds(ids);
     }
 }
 
