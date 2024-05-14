@@ -5,7 +5,7 @@ package com.itheima.reggie.filter;
  */
 
 import com.alibaba.fastjson.JSON;
-import com.itheima.reggie.common.BeasContext;
+import com.itheima.reggie.common.BaseContext;
 import com.itheima.reggie.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -35,7 +35,9 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "employee/logout",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/user/sendMsg",
+                "/user/login",
         };
 
         //检查此次请求是否需要处理
@@ -53,7 +55,18 @@ public class LoginCheckFilter implements Filter {
             log.info("用户已登录，id为：{}", request.getSession().getAttribute("employee"));
 
             Long empId = (Long) request.getSession().getAttribute("employee");
-            BeasContext.setCurrentId(empId);
+            BaseContext.setCurrentId(empId);
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+        if (request.getSession().getAttribute("user") != null) {
+            log.info("用户已登录，id为：{}", request.getSession().getAttribute("user"));
+
+            Long userId = (Long) request.getSession().getAttribute("user");
+            BaseContext.setCurrentId(userId);
 
             filterChain.doFilter(request, response);
             return;

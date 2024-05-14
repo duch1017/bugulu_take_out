@@ -22,8 +22,8 @@ public class MyMetaObjecthandler implements MetaObjectHandler {
         log.info(metaObject.toString());
         metaObject.setValue("createTime", LocalDateTime.now());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("createUser", BeasContext.getCurrentId());
-        metaObject.setValue("updateUser", BeasContext.getCurrentId());
+        metaObject.setValue("createUser", BaseContext.getCurrentId());
+        metaObject.setValue("updateUser", BaseContext.getCurrentId());
     }
 
     /**
@@ -36,6 +36,6 @@ public class MyMetaObjecthandler implements MetaObjectHandler {
         log.info("公共字段自动填充[UPDATE]...");
         log.info(metaObject.toString());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("updateUser", BeasContext.getCurrentId());
+        metaObject.setValue("updateUser", BaseContext.getCurrentId());
     }
 }
