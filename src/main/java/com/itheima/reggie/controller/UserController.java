@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -74,13 +75,14 @@ public class UserController {
     }
 
     /**
-     * 用户退出登录
+     * 用户退出
      *
+     * @param request
      * @return
      */
     @PostMapping("/loginout")
-    public Result<String> loginout() {
-//TODO
+    public Result<String> loginout(HttpServletRequest request) {
+        request.getSession().removeAttribute("user");
         return Result.success("退出成功");
     }
 }
