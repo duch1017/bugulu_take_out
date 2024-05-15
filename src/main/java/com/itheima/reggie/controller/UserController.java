@@ -72,4 +72,15 @@ public class UserController {
         }
         return Result.error("登陆失败");
     }
+
+    /**
+     * 用户退出登录
+     *
+     * @return
+     */
+    @PostMapping("/loginout")
+    public Result<String> loginout() {
+//TODO
+        return Result.success("退出成功");
+    }
 }

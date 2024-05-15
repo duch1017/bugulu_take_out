@@ -48,7 +48,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
-    public Result<Page> page(int page, int pageSize) {
+    public Result<Page<Category>> page(Integer page, Integer pageSize) {
         log.info("page = {},pageSize = {}", page, pageSize);
 
         //分页构造器

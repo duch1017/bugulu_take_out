@@ -1,7 +1,9 @@
 package com.itheima.reggie.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.Result;
+import com.itheima.reggie.entity.Category;
 import com.itheima.reggie.entity.Orders;
 import com.itheima.reggie.service.OrdersService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +33,19 @@ public class OrderController {
 
 
     @GetMapping("/userPage")
-    public Result<Page> page(@RequestBody Integer page, @RequestBody Integer pageSize) {
+    public Result<Page<Orders>> page(Integer page, Integer pageSize) {
+        log.info("page = {},pageSize = {}", page, pageSize);
 
-        return null;
+        //分页构造器
+        Page<Orders> pageInfo = new Page<Orders>(page, pageSize);
+
+        //条件构造器
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+
+        //进行分页查询
+        ordersService.page(pageInfo, queryWrapper);
+
+        return Result.success(pageInfo);
+
     }
 }
