@@ -4,11 +4,11 @@ server:
 spring:
   application:
     # 应用的名称
-    name: reggie_take_out
+    name: bugulu_take_out
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/bugulu?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: aaaa
 mybatis-plus:
@@ -20,5 +20,5 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID
 
-reggie:
-  path: D:/code/git/reggie_take_out/src/main/resources/static/image/
+bugulu:
+  path: D:/code/git/bugulu_take_out/src/main/resources/static/image/

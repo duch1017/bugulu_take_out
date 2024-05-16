@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itheima.reggie.mapper.ShoppingCartMapper">
+<mapper namespace="love.duch.bugulu.mapper.ShoppingCartMapper">
 
-    <resultMap id="BaseResultMap" type="com.itheima.reggie.entity.ShoppingCart">
+    <resultMap id="BaseResultMap" type="love.duch.bugulu.entity.ShoppingCart">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="image" column="image" jdbcType="VARCHAR"/>
