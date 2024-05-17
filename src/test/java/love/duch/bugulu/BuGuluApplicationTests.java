@@ -4,9 +4,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
-import redis.clients.jedis.Jedis;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 //@SpringBootTest
 class BuGuluApplicationTests {
@@ -44,24 +46,5 @@ class BuGuluApplicationTests {
         System.out.println(jwt);
     }
 
-    @Test
-    public void testRedis() {
-        Jedis jedis = new Jedis("192.168.10.100", 6379);
-
-        jedis.auth("aaaa");
-        jedis.set("name", "zhangsan");
-        String name = jedis.get("name");
-        System.out.println(name);
-
-        Hashtable<String, String> hashtable = new Hashtable<>();
-        hashtable.put("name", "zhangsan");
-        hashtable.put("age", "18");
-        jedis.hset("hash", "age", "18");
-        String hash = jedis.hget("hash", "age");
-        System.out.println(hash);
-
-//        jedis.del("name");
-        jedis.close();
-    }
 
 }

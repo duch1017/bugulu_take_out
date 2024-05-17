@@ -8,6 +8,8 @@ import love.duch.bugulu.service.UserService;
 import love.duch.bugulu.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -24,6 +27,8 @@ import java.util.Map;
 public class UserController {
     @Resource(name = "userServiceImpl")
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 发送验证码
@@ -38,7 +43,10 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
 //            SMSUtils.sendMessage("", "", phone, code);
             log.info("验证码={}", code);
-            session.setAttribute(phone, code);
+//            session.setAttribute(phone, code);
+
+            redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
+
             return Result.success("短信发送成功");
         }
         return Result.error("短信发生失败");
@@ -56,8 +64,9 @@ public class UserController {
         log.info("map:{}", map);
         String phone = map.get("phone");
         String code = map.get("code");
-        Object codeInSeesion = session.getAttribute(phone);
-        if (codeInSeesion != null && codeInSeesion.equals(code)) {
+//        Object codeInSeesion = session.getAttribute(phone);
+        String codeRedis = (String) redisTemplate.opsForValue().get(phone);
+        if (codeRedis != null && codeRedis.equals(code)) {
             LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(User::getPhone, phone);
             User user = userService.getOne(queryWrapper);
@@ -68,6 +77,7 @@ public class UserController {
                 userService.save(user);
             }
             session.setAttribute("user", user.getId());
+            redisTemplate.delete(phone);
             return Result.success(user);
         }
         return Result.error("登陆失败");

@@ -13,11 +13,18 @@ spring:
       password: aaaa
 
   redis:
-    url: 192.168.10.100
+    host: 192.168.10.100
     port: 6379
-#    username: duch
+#    username: root
     password: aaaa
     timeout: 60000
+    database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 1ms
+
+
 
 mybatis-plus:
   configuration:
