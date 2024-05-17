@@ -85,18 +85,9 @@ public class ShoppingCartController {
         return Result.success("清空购物车成功");
     }
 
+    // TODO 订单减少数量
     @PostMapping("/sub")
-    // TODO
     public Result<ShoppingCart> sub(ShoppingCart shoppingCart) {
-        Long dishId = shoppingCart.getDishId();
-        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ShoppingCart::getUserId, BaseContext.getCurrentId());
-        if (dishId != null) {
-            queryWrapper.eq(ShoppingCart::getDishId, shoppingCart.getDishId());
-        } else {
-            queryWrapper.eq(ShoppingCart::getSetmealId, shoppingCart.getSetmealId());
-        }
-        ShoppingCart cart = shoppingCartService.getOne(queryWrapper);
 
         return null;
     }

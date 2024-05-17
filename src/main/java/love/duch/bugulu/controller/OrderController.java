@@ -36,7 +36,12 @@ private OrderDetailService orderDetailService;
         return Result.success("下单成功");
     }
 
-
+    /**
+     * 用户端查看历史订单
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/userPage")
     public Result<Page<Orders>> page(Integer page, Integer pageSize) {
         log.info("page = {},pageSize = {}", page, pageSize);
@@ -54,6 +59,12 @@ private OrderDetailService orderDetailService;
 
     }
 
+    /**
+     * 查看订单
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/page")
     public Result<Page<Orders>>orderPage(Integer page,Integer pageSize){
         log.info("page = {},pageSize = {}", page, pageSize);
@@ -70,6 +81,11 @@ private OrderDetailService orderDetailService;
         return Result.success(pageInfo);
     }
 
+    /**
+     * 更新订单状态
+     * @param order
+     * @return
+     */
     @PutMapping
     public Result<String> updateStatus(@RequestBody Orders order){
         log.info("order:{}",order);
@@ -80,17 +96,11 @@ private OrderDetailService orderDetailService;
         return Result.success("状态更新成功");
     }
 
-    //TODO 减少
+    //TODO 再来一单
     @PostMapping("/again")
     public Result<List<OrderDetail>> again(@RequestBody Orders order){
-        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Orders::getId,order.getId());
-        Orders orders = ordersService.getOne(queryWrapper);
-        String orderId = orders.getNumber();
-        LambdaQueryWrapper<OrderDetail>detailLambdaQueryWrapper=new LambdaQueryWrapper<>();
-        detailLambdaQueryWrapper.eq(OrderDetail::getOrderId,orderId);
-        List<OrderDetail> list = orderDetailService.list(detailLambdaQueryWrapper);
 
-        return Result.success(list);
+
+        return null;
     }
 }
