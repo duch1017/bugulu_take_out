@@ -80,7 +80,7 @@ private OrderDetailService orderDetailService;
         return Result.success("状态更新成功");
     }
 
-    //TODO
+    //TODO 减少
     @PostMapping("/again")
     public Result<List<OrderDetail>> again(@RequestBody Orders order){
         LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
