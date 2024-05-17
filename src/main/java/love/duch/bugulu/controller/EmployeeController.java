@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 @Slf4j
 @RestController
@@ -60,6 +63,7 @@ public class EmployeeController {
 
         //登录成功，将id放入session
         request.getSession().setAttribute("employee", emp.getId());
+
         return Result.success(emp);
     }
 

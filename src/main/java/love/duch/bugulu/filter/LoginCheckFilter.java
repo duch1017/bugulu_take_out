@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Hashtable;
 
 @Slf4j
 @WebFilter(filterName = "LoginCheckFilter", urlPatterns = "/*")
@@ -58,6 +59,7 @@ public class LoginCheckFilter implements Filter {
             BaseContext.setCurrentId(empId);
 
             filterChain.doFilter(request, response);
+
             return;
         }
 
