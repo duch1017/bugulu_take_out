@@ -72,7 +72,7 @@ public class DishController {
             @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true),
             @ApiImplicitParam(name = "name", value = "套餐名称", required = false)
     })
-    public Result<Page> page(int page, int pageSize, String name) {
+    public Result<Page<DishDto>> page(int page, int pageSize, String name) {
         Page<Dish> pageInfo = new Page<Dish>(page, pageSize);
         Page<DishDto> dishDtoPage = new Page<>();
 
@@ -127,6 +127,7 @@ public class DishController {
         dishService.updateWithFlavor(dishDto);
 
         String key = "dish_" + dishDto.getCategoryId() + "_1";
+        log.info("key:{}", key);
         redisTemplate.delete(key);
 
         return Result.success("修改菜品成功");
@@ -142,7 +143,8 @@ public class DishController {
     @ApiOperation(value = "根据条件查询对应菜品")
     public Result<List<DishDto>> list(Dish dish) {
         List<DishDto> dishDtoList;
-        String key = dish.getCategoryId() + "_" + dish.getStatus();
+        String key = "dish_" + dish.getCategoryId() + "_" + dish.getStatus();
+        log.info("key:{}", key);
         dishDtoList = (List<DishDto>) redisTemplate.opsForValue().get(key);
         if (dishDtoList != null) {
             return Result.success(dishDtoList);
@@ -171,7 +173,8 @@ public class DishController {
             return dishDto;
         }).collect(Collectors.toList());
 
-        redisTemplate.opsForValue().set(key, dishDtoList, 1, TimeUnit.MINUTES);
+//        key, dishDtoList, 1, TimeUnit.MINUTES
+        redisTemplate.opsForValue().set(key, dishDtoList, 60, TimeUnit.MINUTES);
 
         return Result.success(dishDtoList);
     }
@@ -201,9 +204,10 @@ public class DishController {
     @ApiOperation(value = "删除菜品")
     public Result<String> removeDish(Long[] ids) {
         log.info("ids:{}", Arrays.stream(ids).toArray());
-//        String[] split = ids.split(",");
+
         List<Long> idList = Arrays.asList(ids);
         dishService.removeByIdList(idList);
+
         return Result.success("删除成功");
     }
 

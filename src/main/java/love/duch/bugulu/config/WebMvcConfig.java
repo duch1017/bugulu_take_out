@@ -1,8 +1,8 @@
 package love.duch.bugulu.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
-import love.duch.bugulu.common.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import love.duch.bugulu.common.JacksonObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -25,6 +25,7 @@ import java.util.List;
 public class WebMvcConfig extends WebMvcConfigurationSupport {
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
     @Override

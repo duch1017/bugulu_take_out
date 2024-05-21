@@ -1,16 +1,15 @@
 package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.OrderDetail;
 import love.duch.bugulu.entity.Orders;
 import love.duch.bugulu.service.OrderDetailService;
 import love.duch.bugulu.service.OrdersService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +78,7 @@ public class OrderController {
         log.info("page = {},pageSize = {}", page, pageSize);
 
         //分页构造器
-        Page<Orders> pageInfo = new Page<Orders>(page, pageSize);
+        Page<Orders> pageInfo = new Page<>(page, pageSize);
 
         //条件构造器
         LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();

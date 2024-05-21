@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.BaseContext;
 import love.duch.bugulu.common.Result;
+import love.duch.bugulu.dto.DishDto;
 import love.duch.bugulu.entity.ShoppingCart;
 import love.duch.bugulu.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
@@ -70,8 +71,7 @@ public class ShoppingCartController {
         log.info("查看购物车...");
         Long userId = BaseContext.getCurrentId();
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ShoppingCart::getUserId, userId)
-                .orderByAsc(ShoppingCart::getCreateTime);
+        queryWrapper.eq(ShoppingCart::getUserId, userId).orderByAsc(ShoppingCart::getCreateTime);
         List<ShoppingCart> shoppingCartList = shoppingCartService.list(queryWrapper);
         return Result.success(shoppingCartList);
     }
@@ -91,10 +91,34 @@ public class ShoppingCartController {
         return Result.success("清空购物车成功");
     }
 
-    // TODO 订单减少数量
+    /**
+     * 购物车菜品减少
+     * @param shoppingCart
+     * @return
+     */
     @PostMapping("/sub")
-    public Result<ShoppingCart> sub(ShoppingCart shoppingCart) {
+    public Result<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart) {
+        Long userId = BaseContext.getCurrentId();
 
-        return null;
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId, userId);
+        Long dishId = shoppingCart.getDishId();
+        ShoppingCart cart;
+        if (dishId != null) {
+            queryWrapper.eq(ShoppingCart::getDishId, dishId);
+        } else {
+            queryWrapper.eq(ShoppingCart::getSetmealId, shoppingCart.getSetmealId());
+        }
+        cart = shoppingCartService.getOne(queryWrapper);
+        int num = cart.getNumber() - 1;
+        cart.setNumber(num);
+        queryWrapper.clear();
+        if (num != 0) {
+            shoppingCartService.updateById(cart);
+        } else {
+            shoppingCartService.removeById(cart.getId());
+        }
+
+        return Result.success(cart);
     }
 }
