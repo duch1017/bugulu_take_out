@@ -11,8 +11,5 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/orderDetail")
 public class OrderDetailController {
-    @Resource(name = "orderDetailServiceImpl")
-    private OrderDetailService orderDetailService;
-
 
 }

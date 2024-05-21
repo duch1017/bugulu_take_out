@@ -2,6 +2,10 @@ package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.Employee;
 import love.duch.bugulu.service.EmployeeService;
@@ -20,6 +24,7 @@ import java.util.Hashtable;
 @Slf4j
 @RestController
 @RequestMapping("/employee")
+@Api(tags = "员工管理相关接口")
 public class EmployeeController {
     /*
     @Autowired
@@ -36,6 +41,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "员工登录")
     public Result<Employee> login(HttpServletRequest request, @RequestBody Employee employee) {
         //md5加密password
         String password = employee.getPassword();
@@ -74,6 +80,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
+    @ApiOperation(value = "员工退出")
     public Result<String> logout(HttpServletRequest request) {
         //清理session中保存的当前登录员工的id
         request.getSession().removeAttribute("employee");
@@ -88,6 +95,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "新增员工")
     public Result<String> save(HttpServletRequest request, @RequestBody Employee employee) {
         log.info("新增员工：{}", employee);
         //设置初始密码
@@ -115,6 +123,12 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation(value = "员工信息分页查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", required = true),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true),
+            @ApiImplicitParam(name = "name", value = "套餐名称", required = false)
+    })
     public Result<Page> page(int page, int pageSize, String name) {
         log.info("page = {},pageSize = {},name = {}", page, pageSize, name);
 
@@ -135,7 +149,13 @@ public class EmployeeController {
         return Result.success(pageInfo);
     }
 
-    @PutMapping
+    /**
+     * 修改员工数据
+     * @param request
+     * @param employee
+     * @return
+     */
+    @PutMapping@ApiOperation(value = "修改员工数据")
     public Result<String> update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info(employee.toString());
 
@@ -154,6 +174,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工")
     public Result<Employee> getById(@PathVariable Long id) {
         log.info("根据id查询员工");
         Employee emp = employeeService.getById(id);

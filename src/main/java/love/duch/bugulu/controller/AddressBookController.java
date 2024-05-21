@@ -2,6 +2,9 @@ package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.BaseContext;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.AddressBook;
@@ -18,6 +21,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/addressBook")
+@Api(tags = "地址簿管理")
 public class AddressBookController {
 
     @Resource(name = "addressBookServiceImpl")
@@ -27,6 +31,7 @@ public class AddressBookController {
      * 新增
      */
     @PostMapping
+    @ApiOperation(value = "新增")
     public Result<AddressBook> save(@RequestBody AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
         log.info("addressBook:{}", addressBook);
@@ -38,6 +43,7 @@ public class AddressBookController {
      * 设置默认地址
      */
     @PutMapping("default")
+    @ApiOperation(value = "设置默认地址")
     public Result<AddressBook> setDefault(@RequestBody AddressBook addressBook) {
         log.info("addressBook:{}", addressBook);
         LambdaUpdateWrapper<AddressBook> wrapper = new LambdaUpdateWrapper<>();
@@ -56,6 +62,8 @@ public class AddressBookController {
      * 根据id查询地址
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询地址")
+    @ApiImplicitParam(name = "id", value = "用户id", required = true)
     public Result<AddressBook> get(@PathVariable Long id) {
         AddressBook addressBook = addressBookService.getById(id);
         if (addressBook != null) {
@@ -69,6 +77,7 @@ public class AddressBookController {
      * 查询默认地址
      */
     @GetMapping("default")
+    @ApiOperation(value = "查询默认地址")
     public Result<AddressBook> getDefault() {
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
@@ -88,6 +97,7 @@ public class AddressBookController {
      * 查询指定用户的全部地址
      */
     @GetMapping("/list")
+    @ApiOperation(value = "查询指定用户的全部地址")
     public Result<List<AddressBook>> list(AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
         log.info("addressBook:{}", addressBook);

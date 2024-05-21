@@ -1,5 +1,7 @@
 package love.duch.bugulu.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/common")
+@Api(tags = "公共接口")
 public class CommonController {
     @Value("${bugulu.path}")
     private String basePath;
@@ -34,6 +37,7 @@ public class CommonController {
      * @return
      */
     @PostMapping("/upload")
+    @ApiOperation(value = "文件上传")
     public Result<String> upload(MultipartFile file) throws IOException {
         log.info(file.toString());
 
@@ -56,7 +60,13 @@ public class CommonController {
         return Result.success(fileName);
     }
 
+    /**
+     * 文件回显
+     * @param name
+     * @param response
+     */
     @GetMapping("download")
+    @ApiOperation(value = "文件回显")
     public void download(String name, HttpServletResponse response) {
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(basePath + name));

@@ -3,6 +3,10 @@ package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.dto.SetmealDto;
 import love.duch.bugulu.entity.Category;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/setmeal")
+@Api(tags = "套餐相关接口")
 public class SetmealController {
 
     @Resource(name = "setmealServiceImpl")
@@ -41,6 +46,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "新增套餐")
     public Result<String> save(@RequestBody SetmealDto setmealDto) {
         log.info("套餐信息: {}", setmealDto);
         setmealService.saveWithDish(setmealDto);
@@ -57,6 +63,12 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation(value = "套餐分页查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", required = true),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true),
+            @ApiImplicitParam(name = "name", value = "套餐名称", required = false)
+    })
     public Result<Page<SetmealDto>> list(int page, int pageSize, String name) {
         Page<Setmeal> pageInfo = new Page<>(page, pageSize);
         Page<SetmealDto> dtoPage = new Page<>();
@@ -88,6 +100,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @ApiOperation(value = "删除套餐")
     public Result<String> delete(@RequestParam List<Long> ids) {
         log.info("ids:{}", ids);
         setmealService.removeWithDish(ids);
@@ -102,6 +115,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @ApiOperation(value = "修改套餐状态")
     public Result<String> updateStatus(@PathVariable Integer status, @RequestParam List<Long> ids) {
         log.info("status:{},ids:{}", status, ids);
         setmealService.updateStatus(status, ids);
@@ -115,6 +129,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "修改套餐回显")
     public Result<SetmealDto> page(@PathVariable Long id) {
         log.info("id:{}", id);
         Setmeal setmeal = setmealService.getById(id);
@@ -127,7 +142,14 @@ public class SetmealController {
         return Result.success(setmealDto);
     }
 
+    /**
+     * 更新套餐
+     *
+     * @param setmealDto
+     * @return
+     */
     @PutMapping
+    @ApiOperation(value = "更新套餐")
     public Result<String> updateSetmeal(@RequestBody SetmealDto setmealDto) {
         log.info("setmealDto:{}", setmealDto);
         log.info("更新套餐：{}", setmealDto.getName());
@@ -142,6 +164,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @ApiOperation(value = "根据条件查询菜品")
     public Result<List<Setmeal>> list(Setmeal setmeal) {
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(setmeal.getCategoryId() != null, Setmeal::getCategoryId, setmeal.getCategoryId())

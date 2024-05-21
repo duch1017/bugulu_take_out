@@ -36,4 +36,4 @@ mybatis-plus:
       id-type: ASSIGN_ID
 
 bugulu:
-  path: D:/code/git/bugulu_take_out/src/main/resources/static/image/
+  path: D:/code/bugulu_take_out/src/main/resources/static/image/

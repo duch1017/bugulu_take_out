@@ -2,6 +2,8 @@ package love.duch.bugulu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.User;
 import love.duch.bugulu.service.UserService;
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Slf4j
 @RequestMapping("/user")
+@Api(tags = "用户相关接口")
 public class UserController {
     @Resource(name = "userServiceImpl")
     private UserService userService;
@@ -37,6 +40,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/sendMsg")
+    @ApiOperation(value = "发送验证码")
     public Result<String> sendMsg(@RequestBody User user, HttpSession session) {
         String phone = user.getPhone();
         if (StringUtils.isNotEmpty(phone)) {
@@ -60,6 +64,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "移动端用户登录")
     public Result<User> login(@RequestBody Map<String, String> map, HttpSession session) {
         log.info("map:{}", map);
         String phone = map.get("phone");
@@ -90,6 +95,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/loginout")
+    @ApiOperation(value = "用户退出")
     public Result<String> loginout(HttpServletRequest request) {
         request.getSession().removeAttribute("user");
         return Result.success("退出成功");

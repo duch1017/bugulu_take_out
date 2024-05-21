@@ -1,6 +1,8 @@
 package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.BaseContext;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.ShoppingCart;
@@ -15,6 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/shoppingCart")
+@Api(tags = "购物车相关接口")
 public class ShoppingCartController {
 
     @Resource(name = "shoppingCartServiceImpl")
@@ -27,6 +30,7 @@ public class ShoppingCartController {
      * @return
      */
     @PostMapping("/add")
+    @ApiOperation(value = "菜品加入购物车")
     public Result<ShoppingCart> add(@RequestBody ShoppingCart shoppingCart) {
         log.info("购物车数据：{}", shoppingCart);
 
@@ -61,6 +65,7 @@ public class ShoppingCartController {
      * @return
      */
     @GetMapping("/list")
+    @ApiOperation(value = "查看购物车")
     public Result<List<ShoppingCart>> list() {
         log.info("查看购物车...");
         Long userId = BaseContext.getCurrentId();
@@ -77,6 +82,7 @@ public class ShoppingCartController {
      * @return
      */
     @DeleteMapping("/clean")
+    @ApiOperation(value = "清空购物车")
     public Result<String> clean() {
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ShoppingCart::getUserId, BaseContext.getCurrentId());

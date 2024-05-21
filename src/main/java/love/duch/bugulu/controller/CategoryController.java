@@ -2,6 +2,10 @@ package love.duch.bugulu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import love.duch.bugulu.common.Result;
 import love.duch.bugulu.entity.Category;
 import love.duch.bugulu.service.CategoryService;
@@ -14,6 +18,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/category")
+@Api(tags = "菜品及套餐分类")
 public class CategoryController {
     //    @Autowired
     @Resource(name = "categoryServiceImpl")
@@ -26,6 +31,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "新增分类")
     public Result<String> save(@RequestBody Category category) {
         log.info("category:{}", category);
         categoryService.save(category);
@@ -40,6 +46,11 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation(value = "分页查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", required = true),
+            @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true)
+    })
     public Result<Page<Category>> page(Integer page, Integer pageSize) {
         log.info("page = {},pageSize = {}", page, pageSize);
 
@@ -65,6 +76,8 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping
+    @ApiOperation(value = "根据id删除分类")
+    @ApiImplicitParam(name = "id",value = "套餐id",required = true)
     public Result<String> delete(Long id) {
         log.info("根据id删除分类：{}", id);
 
@@ -80,6 +93,7 @@ public class CategoryController {
      * @return
      */
     @PutMapping
+    @ApiOperation(value = "根据id修改分类信息")
     public Result<String> update(@RequestBody Category category) {
         log.info("修改分类信息：{}", category);
         categoryService.updateById(category);
@@ -93,6 +107,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/list")
+    @ApiOperation(value = "根据条件查找分类数据")
     public Result<List<Category>> list(Category category) {
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(category.getType() != null, Category::getType, category.getType());
