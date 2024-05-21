@@ -5,16 +5,21 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import love.duch.bugulu.common.BaseContext;
 import love.duch.bugulu.common.Result;
-import love.duch.bugulu.entity.OrderDetail;
-import love.duch.bugulu.entity.Orders;
+import love.duch.bugulu.dto.DishDto;
+import love.duch.bugulu.entity.*;
 import love.duch.bugulu.service.OrderDetailService;
 import love.duch.bugulu.service.OrdersService;
+import love.duch.bugulu.service.ShoppingCartService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -25,6 +30,8 @@ public class OrderController {
     private OrdersService ordersService;
     @Autowired
     private OrderDetailService orderDetailService;
+    @Autowired
+    private ShoppingCartService shoppingCartService;
 
     /**
      * 用户下单
@@ -106,11 +113,33 @@ public class OrderController {
         return Result.success("状态更新成功");
     }
 
-    //TODO 再来一单
+    /**
+     * 再来一单
+     * @param orders
+     * @return
+     */
     @PostMapping("/again")
-    public Result<List<OrderDetail>> again(@RequestBody Orders order) {
+    public Result<String> again(@RequestBody Orders orders) {
+        Orders order = ordersService.getById(orders.getId());
+        LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderDetail::getOrderId, order.getNumber());
+        List<OrderDetail> detailList = orderDetailService.list(queryWrapper);
 
+        ShoppingCart cart = new ShoppingCart();
+        for (OrderDetail o : detailList) {
+            cart.setId(null);
+            cart.setName(o.getName());
+            cart.setImage(o.getImage());
+            cart.setUserId(BaseContext.getCurrentId());
+            cart.setDishId(o.getDishId());
+            cart.setSetmealId(o.getSetmealId());
+            cart.setDishFlavor(o.getDishFlavor());
+            cart.setNumber(o.getNumber());
+            cart.setAmount(o.getAmount());
+            cart.setCreateTime(LocalDateTime.now());
+            shoppingCartService.save(cart);
+        }
 
-        return null;
+        return Result.success("操作成功");
     }
 }
