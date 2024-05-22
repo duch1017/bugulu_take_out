@@ -44,7 +44,7 @@ public class UserController {
     public Result<String> sendMsg(@RequestBody User user, HttpSession session) {
         String phone = user.getPhone();
         if (StringUtils.isNotEmpty(phone)) {
-            String code = ValidateCodeUtils.generateValidateCode(4).toString();
+            String code = ValidateCodeUtils.generateValidateCode(6).toString();
 //            SMSUtils.sendMessage("", "", phone, code);
             log.info("验证码={}", code);
 //            session.setAttribute(phone, code);
