@@ -119,6 +119,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("/again")
+    @ApiOperation(value = "再来一单")
     public Result<String> again(@RequestBody Orders orders) {
         Orders order = ordersService.getById(orders.getId());
         LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();

@@ -97,6 +97,7 @@ public class ShoppingCartController {
      * @return
      */
     @PostMapping("/sub")
+    @ApiOperation(value = "减少数量")
     public Result<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart) {
         Long userId = BaseContext.getCurrentId();
 
