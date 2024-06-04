@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 @SpringBootTest
 public class RedisTest {
@@ -31,4 +31,17 @@ public class RedisTest {
         redisTemplate.delete("name");
     }
 
+    @Test
+    public void testSum(int[] nums, int target) {
+        Hashtable<Integer, Integer> hashtable = new Hashtable<Integer, Integer>();
+        for (int index = 0; index < nums.length; index++) {
+            int i = target - nums[index];
+            if (hashtable.get(i) != null) {
+                int[] ints = {index, hashtable.get(index)};
+                System.out.println(Arrays.toString(ints));
+            }
+            hashtable.put(index,nums[index]);
+        }
+        return;
+    }
 }
